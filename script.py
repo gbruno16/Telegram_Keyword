@@ -6,6 +6,7 @@ import re
 from telegram.ext import Updater
 import logging
 from telegram.ext import CommandHandler, MessageHandler, Filters
+from webserver import keep_alive
 
 # Initializing telethon parameters
 t_api_id = os.environ['t_api_id']
@@ -41,7 +42,7 @@ def start(update, context):
 	global chat_bot
 	chat = update.effective_chat.id
 	chat_bot=chat
-	context.bot.send_message(chat_id=update.effective_chat.id, text="Welcome to the Notification Bot. Send /add to add a new keyword. Send /list to show all the saved keywords.")
+	context.bot.send_message(chat_id=update.effective_chat.id, text="Welcome to the Notification Bot. Send /add to add a new keyword. Send /list to show all the saved keywords. Send /remove to remove a keyword from the list.")
 
 # Send list of keywords
 def list_fun(update,context):
@@ -134,9 +135,9 @@ t_client = TelegramClient('anon', t_api_id, t_api_hash)
 # Start searching for keywords
 @t_client.on(events.NewMessage)
 async def my_event_handler(event):
-  if event.chat.id != chat_bot: # Check if the message comes from the chat with bot itself
+  if event.chat != None and event.chat.id != chat_bot: # Check if the message comes from the chat with bot itself
     for keyword in keywords_list:
-    	match = re.search(keyword, event.raw_text)
+    	match = re.search(keyword, event.raw_text, re.IGNORECASE)
     	if match:
         # Bot send alert to channel
     		updater.bot.send_message(chat_id=int(channel_id), text="Found keyword!")
@@ -145,5 +146,6 @@ async def my_event_handler(event):
     		# Telethon forwards the message
     		await t_client.forward_messages(channel, event.message)
 
+keep_alive()
 t_client.start()
 t_client.run_until_disconnected()
