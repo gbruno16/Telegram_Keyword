@@ -13,6 +13,7 @@ t_api_id = os.environ['t_api_id']
 t_api_hash = os.environ['t_api_hash']
 channel_id = os.environ['channel_id']
 channel_link = os.environ['channel_link']
+count=0
 
 # Updating keywords
 def update_list():
@@ -53,6 +54,13 @@ def list_fun(update,context):
     
   context.bot.send_message(chat_id=update.effective_chat.id, text=text_list)
 
+#How many message were scanned
+def stat(update,context):
+  global count
+  chat = update.effective_chat.id
+  context.bot.send_message(chat_id=update.effective_chat.id, text="Total number of messages analyzed: "+str(count))
+  adding=True
+  
 # Ask for new keyword
 def add(update,context):
   global adding
@@ -105,7 +113,6 @@ def keyword_add(update,context):
     else:
       context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, I can't find"+keyword+" in the list. Try again")
       
-      
         
         
 # Ask the keyword to remove
@@ -117,12 +124,14 @@ def remove(update,context):
 
 
 start_handler = CommandHandler('start', start)
+stat_handler = CommandHandler('stat', stat)
 list_handler = CommandHandler('list', list_fun)
 add_handler = CommandHandler('add', add)
 remove_handler = CommandHandler('remove', remove)
 key_handler=MessageHandler(Filters.text, keyword_add)
 
 dispatcher.add_handler(start_handler)
+dispatcher.add_handler(stat_handler)
 dispatcher.add_handler(list_handler)
 dispatcher.add_handler(add_handler)
 dispatcher.add_handler(remove_handler)
@@ -135,6 +144,8 @@ t_client = TelegramClient('anon', t_api_id, t_api_hash)
 # Start searching for keywords
 @t_client.on(events.NewMessage)
 async def my_event_handler(event):
+  global count
+  count=count+1
   if event.chat != None and event.chat.id != chat_bot: # Check if the message comes from the chat with bot itself
     for keyword in keywords_list:
     	match = re.search(keyword, event.raw_text, re.IGNORECASE)

@@ -7,3 +7,6 @@ A bot can solve this problem by sending an alert to the channel. Furthermore it 
 
 ## Hosting
 The script is hosted on Reply.it for free (thanks to uptimerobot.com).
+
+## To-Do
+- Add a blacklist for keywords you are not looking for
