@@ -6,7 +6,8 @@ If telethon sends a message, through your own account, you wouldn't get any push
 A bot can solve this problem by sending an alert to the channel. Furthermore it helps to edit the keywords list.
 
 ## Hosting
-The script is hosted on Reply.it for free (thanks to uptimerobot.com).
+The script is hosted on Replit for free (thanks to uptimerobot.com).
 
 ## To-Do
 - Add a blacklist for keywords you are not looking for
+- Add a menu in the bot conversation
