@@ -1,5 +1,5 @@
 # Notification Script
-This is a python script that connects to your telegram account, reads every message you receive and if it contains some keywords forwards it to a specific channel.
+This is a python script that connects to your telegram account, reads every message you receive and if it contains a keyword forwards it to a specific channel.
 
 ## How does it work?
 If telethon sends a message, through your own account, you wouldn't get any push notification. 
